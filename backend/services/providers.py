@@ -23,6 +23,10 @@ class HFProvider(ModelProvider):
 
 class OpenAIProvider(ModelProvider):
     def __init__(self):
+        if not settings.OPENAI_API_KEY:
+            self.available = False
+            return
+            
         try:
             from openai import OpenAI
             self.client = OpenAI(api_key=settings.OPENAI_API_KEY)

@@ -23,12 +23,15 @@ def health_check():
         status["pinecone"] = f"unreachable: {str(e)}"
 
     # Check OpenAI
-    try:
-        client = OpenAI(api_key=settings.OPENAI_API_KEY)
-        client.models.list()
-        status["openai"] = "reachable"
-    except Exception as e:
-        status["openai"] = f"unreachable: {str(e)}"
+    if settings.OPENAI_API_KEY:
+        try:
+            client = OpenAI(api_key=settings.OPENAI_API_KEY)
+            client.models.list()
+            status["openai"] = "reachable"
+        except Exception as e:
+            status["openai"] = f"unreachable: {str(e)}"
+    else:
+        status["openai"] = "not_configured"
         
     # Check HuggingFace
     try:
